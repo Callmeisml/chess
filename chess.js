@@ -16,9 +16,10 @@ file.forEach(element => {
     for (let i = 0; i < 8; i++) {
         n++;
         x = element + (i+1);
+        y = id % 7;
         Case = {
             row: i,
-            file: id % 7,
+            file: y,
             id: n,
             name: x,
             piece: ''
@@ -94,43 +95,16 @@ colors.forEach(element => {
 });
 
 function assignStartingCases(id) { 
+
     if (id <= 7) {
         i = id + 1 + (7 * id);
-    } else if (id == 8) {
-        i = 0;
-    } else if (id == 9) {
-        i = 56; 
-    } else if (id == 10) {
-        i = 8;
-    } else if (id == 11) {
-        i = 48;
-    } else if (id == 12) {
-        i = 16; 
-    } else if (id == 13) {
-        i = 40; 
-    } else if (id == 14) {
-        i = 24;
-    } else if (id == 15) {
-        i = 32;
     } else if (id > 15 && id <= 23) {
         i = 6 + (8 * (id % 16));
-    } else if (id == 24) {
-        i = 7; 
-    } else if (id == 25) {
-        i = 63;
-    } else if (id == 26) {
-        i = 15; 
-    } else if (id == 27) {
-        i = 55;
-    } else if (id == 28) {
-        i = 23;
-    } else if (id == 29) {
-        i = 47;
-    } else if (id == 30) {
-        i = 31;
-    } else if (id == 31) {
-        i = 39;
-    }
+    } else if ((id > 7 && id <16 || id > 23 && id <= 32) && (id % 2) == 0) {
+        i = (id - 7) * 8;
+    } else if ((id > 7 && id <16 || id > 23 && id <= 32) && (id % 2) == 1) {
+        i = 64 - ((id - 8) * 8); 
+    };
 
 
     Case = board[i].name;
