@@ -18,7 +18,7 @@ file.forEach(element => {
         x = element + (i+1);
         Case = {
             row: i,
-            file: 
+            file: id % 7,
             id: n,
             name: x,
             piece: ''
