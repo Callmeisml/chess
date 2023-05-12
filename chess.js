@@ -11,24 +11,24 @@ let file = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 let name;
 let n = 0;
 let Case;
+let x;
+let k = 0;
 
 file.forEach(element => {
     for (let i = 0; i < 8; i++) {
         n++;
         x = element + (i+1);
-        y = id % 7;
         Case = {
             row: i,
-            file: y,
+            file: k,
             id: n,
             name: x,
             piece: ''
         };
         board.push(Case);
     }
-    
+    k++;
 });
-
 
 
 //setup
@@ -100,11 +100,15 @@ function assignStartingCases(id) {
         i = id + 1 + (7 * id);
     } else if (id > 15 && id <= 23) {
         i = 6 + (8 * (id % 16));
-    } else if ((id > 7 && id <16 || id > 23 && id <= 32) && (id % 2) == 0) {
-        i = (id - 7) * 8;
-    } else if ((id > 7 && id <16 || id > 23 && id <= 32) && (id % 2) == 1) {
-        i = 64 - ((id - 8) * 8); 
-    };
+    } else if ((id > 7 && id < 16) && ((id % 2) == 0)) {
+        i = 0 + ((id - 8) * 8);
+    } else if ((id > 7 && id < 16) && ((id % 2) == 1)) {
+        i = 56 - ((id - 9) * 8); 
+    } else if  ((id > 23 && id <= 32) && (id % 2) == 0) {
+        i = 7 + ((id - 24) * 8);
+    } else if ((id > 23 && id <= 32) && (id % 2) == 1) {
+        i = 63 - ((id - 25) * 8);
+    }
 
 
     Case = board[i].name;
