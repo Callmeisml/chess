@@ -116,8 +116,37 @@ function assignStartingCases(id) {
     board[i].piece = piece;
 };
 
+//game history and useful functions
 
-// Start of the game
+function changeGameHistory() {
+    gameHistory.push((" " + Turn + ". " + input + " "));
+}
+
+function searchPieceInBoard(array, propertyToCheck, valueToMatch, lookupProperty, typetocheck) {
+    for (let i = 0; i < array.length; i++) {
+      if (array[i][lookupProperty] === valueToMatch && array[i][propertyToCheck].type === typetocheck) {
+        return array[i].id;
+      }
+    } 
+    return false;
+  }
+
+function isCaseEmpty(valueToMatch) {
+    let empty;
+    console.log(`isCaseEmptyis checking ${valueToMatch}`)
+    for (let i = 0; i < 63; i++) {
+      if (board[i]['name'] == valueToMatch) {
+        board[i].piece == '' ?  empty = true : empty = false;
+      } 
+    } 
+    return empty; 
+  }
+
+  let casetomove;
+  let PawnMove;
+
+
+//start of the game 
 
 function Declare() {
     console.log(Turn);
@@ -143,38 +172,98 @@ function Declare() {
 
 Declare();
 
+// checkMove
+
+function checkMove(input) {
+    if (input.length === 2) {
+        PawnMove = input;
+        console.log(PawnMove + "in checkmove");
+        checkPawnMove(PawnMove); 
+
+    } else if (input.length == 3) {
+        if (input.charAt(0) == 'N') {
+            KnightMove = input;
+            checkKnightMove();
+
+        } else if (input.charAT(0) == 'B') {
+            BishopMove = input; 
+            checkBishopMove();
+
+        } else if (input.charAT(0) == 'R') {
+            RookMove = input; 
+            checkRookMove();
+
+        } else if (input.charAT(0) == 'Q') {
+            BishopMove = input; 
+            checkQueenMove();
+
+        } else if (input.charAT(0) == 'K') {
+            BishopMove = input; 
+            checkKingMove();
+
+        } else if (input == '0-0') {
+            shortCastle();
+        }
+
+    } else if (input.length == 4) {
+        if ((input.charAt(0) == 'N') && (input.charAt(1) == 'x')) {
+            KnightMove = input;
+            checkKnightCaptures();
+
+        } else if ((input.charAT(0) == 'B') && (input.charAt(1) == 'x')) {
+            BishopMove = input; 
+            checkBishopCaptures();
+
+        } else if ((input.charAt(0) == 'R') && (input.charAt(1) == 'x')) {
+            KnightMove = input;
+            checkRookCaptures();
+
+        } else if ((input.charAT(0) == 'Q') && (input.charAt(1) == 'x')) {
+            BishopMove = input; 
+            checkQueenCaptures();
+
+        } else if ((input.charAT(0) == 'K') && (input.charAt(1) == 'x')) {
+            BishopMove = input; 
+            checkKingCaptures();
+
+        } else if (((input.charAt(0) == 'N') && ((input.charAt(1) == ('a'||'b'||'c'||'d'||'e'||'f'||'g'||'h')) || (input.charAt(1) == ('1'||'2'||'3'||'4'||'5'||'6'||'7'||'8')) )) ) {
+            KnightMove = input;
+            checkKnightMove();
+
+        } else if (((input.charAt(0) == 'B') && ((input.charAt(1) == ('a'||'b'||'c'||'d'||'e'||'f'||'g'||'h')) || (input.charAt(1) == ('1'||'2'||'3'||'4'||'5'||'6'||'7'||'8')) )) ) {
+            BishopMove = input; 
+            checkBishopMove();
+
+        } else if (((input.charAt(0) == 'R') && ((input.charAt(1) == ('a'||'b'||'c'||'d'||'e'||'f'||'g'||'h')) || (input.charAt(1) == ('1'||'2'||'3'||'4'||'5'||'6'||'7'||'8')) )) ) {
+            KnightMove = input;
+            checkRookMove();
+
+        } else if (((input.charAt(0) == 'Q') && ((input.charAt(1) == ('a'||'b'||'c'||'d'||'e'||'f'||'g'||'h')) || (input.charAt(1) == ('1'||'2'||'3'||'4'||'5'||'6'||'7'||'8')) )) ) {
+            BishopMove = input; 
+            checkQueenMove();
+
+        } else if (((input.charAt(0) == 'K') && ((input.charAt(1) == ('a'||'b'||'c'||'d'||'e'||'f'||'g'||'h')) || (input.charAt(1) == ('1'||'2'||'3'||'4'||'5'||'6'||'7'||'8')) )) ) {
+            BishopMove = input; 
+            checkKingMove();
+
+        } 
+
+    }};
 
 
+// Pawn Move
 
-//game history
+function checkPawnMove(PawnMove) {
+    console.log('Pawn moves to ' + PawnMove);
+    
+    casetomove = checkPMpossible(PawnMove);
 
-function changeGameHistory() {
-    gameHistory.push((" " + Turn + ". " + input + " "));
+    if (casetomove != false) {
+        movePawn(casetomove,PawnMove);
+    } else {
+        console.log('Pawn move is not possible')
+    }
 }
-
-//moves function
-
-//Pawn Move 
-
-function searchPieceInBoard(array, propertyToCheck, valueToMatch, lookupProperty, typetocheck) {
-    for (let i = 0; i < array.length; i++) {
-      if (array[i][lookupProperty] === valueToMatch && array[i][propertyToCheck].type === typetocheck) {
-        return array[i].id;
-      }
-    } 
-    return false;
-  }
-
-function isCaseEmpty(array, propertyToCheck, valueToMatch, lookupProperty) {
-    for (let i = 0; i < array.length; i++) {
-      if (array[i][lookupProperty] === valueToMatch && array[i][propertyToCheck].type === '') {
-        return true;
-      }
-    } 
-    return false;
-  }
-  
-let piecetomove;
 
 function checkPMpossible(PawnMove) {
     let possible;
@@ -182,7 +271,7 @@ function checkPMpossible(PawnMove) {
     console.log(PawnMove.charAt(1));
     let pawnfile = PawnMove.charAt(0);
     let pawnrank = (PawnMove.charAt(1) - 1);
-    let empty = isCaseEmpty(board, "piece", PawnMove, "name");
+    let empty = isCaseEmpty(PawnMove);
     
 
     switch (PawnMove.charAt(1)) {
@@ -190,24 +279,24 @@ function checkPMpossible(PawnMove) {
             if (searchPieceInBoard(board, "piece", `${pawnfile}3`, 'name', 'pawn') != false) {
                 console.log("check d3");
                 possible = 1;
-                piecetomove = `${pawnfile}3`;
+                casetomove = `${pawnfile}3`;
 
             } else if (searchPieceInBoard(board, "piece", `${pawnfile}2`, 'name', 'pawn') != false) {
                 console.log("check d2");
                 possible = 1; 
-                piecetomove = `${pawnfile}2`;
+                casetomove = `${pawnfile}2`;
             } else {
                 possible = 0;
             }
         
         default:
             searchPieceInBoard(board, "piece", `${pawnfile}${pawnrank}`, 'name', 'pawn') != false ? possible = 1 : possible = 0;
-            piecetomove = `${pawnfile}${pawnrank}`;
+            casetomove = `${pawnfile}${pawnrank}`;
 
     }
 
     if (possible === 1 && empty === true) {
-        return piecetomove;
+        return casetomove;
     } else {
         return false;
     }
@@ -215,23 +304,21 @@ function checkPMpossible(PawnMove) {
 
 }
 
-
-
-let PawnMove;
-function checkPawnMove(PawnMove) {
-    console.log('Pawn moves to ' + PawnMove);
-    piecetomove = checkPMpossible(PawnMove);
-
-    if (piecetomove != false) {
-        let i = (searchPieceInBoard(board, "piece", piecetomove, 'name') - 1);
-        let k = (searchPieceInBoard(board, "piece", PawnMove, 'name') -1);
-        board[k].piece = board[i].piece;
-        board[i].piece = '';
-        
-
+function movePawn(casetomove,casetomoveto) {
+    let idcasetomove;
+    let idcasetomoveto;
+    for (let i = 0; i < board.length; i++) {
+        if (board[i]['name'] === casetomove) {
+            idcasetomove = i;
+        } else if (board[i]['name'] === casetomoveto) {
+            idcasetomoveto = i;
+        }}
+      board[idcasetomoveto][piece] = board[idcasetomove][piece];
+      board[idcasetomove][piece] = '';
+      return false;
     }
 
 
-}
+
 
 
