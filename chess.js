@@ -125,7 +125,7 @@ function changeGameHistory() {
 function searchPieceInBoard(array, propertyToCheck, valueToMatch, lookupProperty, typetocheck) {
     for (let i = 0; i < array.length; i++) {
       if (array[i][lookupProperty] === valueToMatch && array[i][propertyToCheck].type === typetocheck) {
-        return array[i].id;
+        return true;
       }
     } 
     return false;
@@ -140,6 +140,17 @@ function isCaseEmpty(valueToMatch) {
       } 
     } 
     return empty; 
+  }
+
+function getIDofCase(valueToMatch) {
+    let IDofCase;
+    console.log(`getIDofCAse is checking ${valueToMatch}`)
+    for (let i = 0; i < 63; i++) {
+      if (board[i]['name'] == valueToMatch) {
+        IDofCase = i;
+      } 
+    } 
+    return IDofCase; 
   }
 
   let casetomove;
@@ -259,7 +270,7 @@ function checkPawnMove(PawnMove) {
     casetomove = checkPMpossible(PawnMove);
 
     if (casetomove != false) {
-        movePawn(casetomove,PawnMove);
+        movePawn(casetomove, PawnMove);
     } else {
         console.log('Pawn move is not possible')
     }
@@ -272,50 +283,44 @@ function checkPMpossible(PawnMove) {
     let pawnfile = PawnMove.charAt(0);
     let pawnrank = (PawnMove.charAt(1) - 1);
     let empty = isCaseEmpty(PawnMove);
+    console.log(empty);
     
 
-    switch (PawnMove.charAt(1)) {
-        case '4': 
-            if (searchPieceInBoard(board, "piece", `${pawnfile}3`, 'name', 'pawn') != false) {
+    if (PawnMove.charAt(1) == 4) { 
+        if (searchPieceInBoard(board, "piece", `${pawnfile}3`, 'name', 'pawn') == true) {
                 console.log("check d3");
-                possible = 1;
+                possible = true;
                 casetomove = `${pawnfile}3`;
-
-            } else if (searchPieceInBoard(board, "piece", `${pawnfile}2`, 'name', 'pawn') != false) {
+             } else if (searchPieceInBoard(board, "piece", `${pawnfile}2`, 'name', 'pawn') == true) {
                 console.log("check d2");
-                possible = 1; 
+                possible = true; 
                 casetomove = `${pawnfile}2`;
             } else {
-                possible = 0;
+                possible = false;
             }
-        
-        default:
-            searchPieceInBoard(board, "piece", `${pawnfile}${pawnrank}`, 'name', 'pawn') != false ? possible = 1 : possible = 0;
+    } else {
+        searchPieceInBoard(board, "piece", `${pawnfile}${pawnrank}`, 'name', 'pawn') == true ? possible = true : possible = false;
             casetomove = `${pawnfile}${pawnrank}`;
-
     }
-
-    if (possible === 1 && empty === true) {
+    
+    console.log(empty);
+    console.log(possible);
+    if ((possible == true) && (empty == true)) {
         return casetomove;
     } else {
         return false;
     }
 
+    }
 
-}
+    
+
 
 function movePawn(casetomove,casetomoveto) {
-    let idcasetomove;
-    let idcasetomoveto;
-    for (let i = 0; i < board.length; i++) {
-        if (board[i]['name'] === casetomove) {
-            idcasetomove = i;
-        } else if (board[i]['name'] === casetomoveto) {
-            idcasetomoveto = i;
-        }}
-      board[idcasetomoveto][piece] = board[idcasetomove][piece];
-      board[idcasetomove][piece] = '';
-      return false;
+    let idcasetomove = getIDofCase(casetomove);
+    let idcasetomoveto = getIDofCase(casetomoveto);
+      board[idcasetomoveto]['piece'] = board[idcasetomove]['piece'];
+      board[idcasetomove]['piece'] = '';
     }
 
 
