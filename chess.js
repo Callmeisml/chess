@@ -158,6 +158,14 @@ function getIDofCase(valueToMatch) {
     return IDofCase; 
   }
 
+  function whatColorOfPiece(Case) {
+    console.log(`whatColorOfPiece is checking ${Case}`)
+    i = getIDofCase(Case);
+    let colorofpiece = board[i]['piece'].color;
+    console.log(board[i]['piece'].color)
+    return colorofpiece;
+  }
+
   let casetomove;
   let PawnMove;
 
@@ -203,7 +211,7 @@ function checkMove(input) {
 
         } else if (input.charAT(0) == 'B') {
             BishopMove = input; 
-            checkBishopMove();
+            checkBishopMove(BishopMove);
 
         } else if (input.charAT(0) == 'R') {
             RookMove = input; 
@@ -274,11 +282,13 @@ function checkPawnMove(PawnMove) {
     casetomove = checkPMpossible(PawnMove);
 
     if (casetomove != false) {
-        movePawn(casetomove, PawnMove);
+        movePiece(casetomove, PawnMove);
     } else {
         console.log('Pawn move is not possible')
     }
 }
+
+
 
 function checkPMpossible(PawnMove) {
 
@@ -296,18 +306,31 @@ function checkPMpossible(PawnMove) {
         if (PawnMove.charAt(1) == 4) { 
             if (searchPieceInBoard(board, "piece", `${pawnfile}3`, 'name', 'pawn') == true) {
                 console.log("check d3");
-                possible = true;
-                casetomove = `${pawnfile}3`;
+                if (whatColorOfPiece(`${pawnfile}3`) == Player) {
+                    possible = true; 
+                    casetomove = `${pawnfile}3`;  
+                } else {
+                    possible = false;
+                }
             } else if (searchPieceInBoard(board, "piece", `${pawnfile}2`, 'name', 'pawn') == true) {
                 console.log("check d2");
-                possible = true; 
-                casetomove = `${pawnfile}2`;
+                if (whatColorOfPiece(`${pawnfile}2`) == Player) {
+                    possible = true;
+                    casetomove = `${pawnfile}2`;   
+                } else {
+                    possible = false;
+                }
             } else {
                 possible = false;
             }
         } else {
             searchPieceInBoard(board, "piece", `${pawnfile}${pawnrank}`, 'name', 'pawn') == true ? possible = true : possible = false;
-                casetomove = `${pawnfile}${pawnrank}`;
+            if (whatColorOfPiece(`${pawnfile}${pawnrank}`) == Player) {
+                possible = true;
+                casetomove = `${pawnfile}${pawnrank}`;   
+            }  else {
+                possible = false;
+            }
         }
 
     } else if (Player == 'black') {
@@ -318,24 +341,36 @@ function checkPMpossible(PawnMove) {
         if (PawnMove.charAt(1) == 5) { 
             if (searchPieceInBoard(board, "piece", `${pawnfile}6`, 'name', 'pawn') == true) {
                 console.log("check d6");
-                possible = true;
-                casetomove = `${pawnfile}6`;
+                if (whatColorOfPiece(`${pawnfile}6`) == Player) {
+                    possible = true; 
+                    casetomove = `${pawnfile}6`;  
+                } else {
+                    possible = false; 
+                }
             } else if (searchPieceInBoard(board, "piece", `${pawnfile}7`, 'name', 'pawn') == true) {
                 console.log("check d7");
-                possible = true; 
-                casetomove = `${pawnfile}7`;
+                if (whatColorOfPiece(`${pawnfile}7`) == Player) {
+                    possible = true;
+                    casetomove = `${pawnfile}7`;   
+                } else {
+                    possible = false;
+                }
             } else {
                 possible = false;
             }
-        } else {
-            searchPieceInBoard(board, "piece", `${pawnfile}${pawnrank}`, 'name', 'pawn') == true ? possible = true : possible = false;
-                casetomove = `${pawnfile}${pawnrank}`;
+        } else { 
+            if ((whatColorOfPiece(`${pawnfile}${pawnrank}`) == Player) && (searchPieceInBoard(board, "piece", `${pawnfile}${pawnrank}`, 'name', 'pawn') == true)) {
+                possible = true;
+                casetomove = `${pawnfile}${pawnrank}`;   
+            }  else {
+                possible = false;
+            }
         }
 
     }
 
-
-    
+    console.log(casetomove)
+    console.log(Player + ' ' + whatColorOfPiece(casetomove))
     console.log(empty);
     console.log(possible);
     if ((possible == true) && (empty == true)) {
@@ -346,9 +381,24 @@ function checkPMpossible(PawnMove) {
 
     }
 
+    // Bishop Move
 
+    function checkBishopMove(BishopMove) {
+        casetomove = checkBMpossible(BishopMove);
+    
+        if (casetomove != false) {
+            movePiece(casetomove, BishopMove);
+        } else {
+            console.log('Bishop move is not possible')
+        }
+    }
 
-function movePawn(casetomove,casetomoveto) {
+    function checkBMpossible (BishopMove) {
+
+    }
+    //
+
+function movePiece(casetomove,casetomoveto) {
     let idcasetomove = getIDofCase(casetomove);
     let idcasetomoveto = getIDofCase(casetomoveto);
       board[idcasetomoveto]['piece'] = board[idcasetomove]['piece'];
