@@ -236,11 +236,11 @@ function getIDofCase(valueToMatch) {
     let scope = [];
     id = getIDofCase(Case);
     id = id + 1;
-    while (isCaseEmpty(board[id].name) == true) {
+    while (id < 64 && id >= 0 && isCaseEmpty(board[id].name) == true) {
         scope.push(id);
         id = id + 1;
     } 
-    if (board[id]['piece'].color != Player) {
+    if (id < 64 && id >= 0 && board[id]['piece'].color != Player) {
         scope.push(id);
     } 
     return scope;
@@ -250,11 +250,11 @@ function getIDofCase(valueToMatch) {
     let scope = [];
     id = getIDofCase(Case);
     id = id - 8;
-    while (isCaseEmpty(board[id].name) == true) {
+    while (id < 64 && id >= 0 && isCaseEmpty(board[id].name) == true) {
         scope.push(id);
         id = id - 8;
     } 
-    if (board[id]['piece'].color != Player) {
+    if (id < 64 && id >= 0 && board[id]['piece'].color != Player) {
         scope.push(id);
     } 
     return scope;
@@ -264,11 +264,11 @@ function getIDofCase(valueToMatch) {
     let scope = [];
     id = getIDofCase(Case);
     id = id + 8;
-    while (isCaseEmpty(board[id].name) == true) {
+    while (id < 64 && id >= 0 && isCaseEmpty(board[id].name) == true) {
         scope.push(id);
         id = id + 8;
     } 
-    if (board[id]['piece'].color != Player) {
+    if (id < 64 && id >= 0 && board[id]['piece'].color != Player) {
         scope.push(id);
     } 
     return scope;
@@ -278,11 +278,11 @@ function getIDofCase(valueToMatch) {
     let scope = [];
     id = getIDofCase(Case);
     id = id - 1;
-    while (isCaseEmpty(board[id].name) == true) {
+    while (id < 64 && id >= 0 && isCaseEmpty(board[id].name) == true) {
         scope.push(id);
         id = id - 1;
     } 
-    if (board[id]['piece'].color != Player) {
+    if (id < 64 && id >= 0 && board[id]['piece'].color != Player) {
         scope.push(id);
     } 
     return scope;
@@ -295,6 +295,21 @@ function getIDofCase(valueToMatch) {
     scopes.push(rLane(Case));
     scopes.push(dLane(Case));
     return scopes;
+  }
+
+  function Surroundings(Case) {
+    let scope = [];
+    id = getIDofCase(Case);
+    surroundings = [];
+    directions = [-7, 1, 9, -8, 8, -9, -1, 7];
+    directions.forEach( element => {
+        let idinsurrounding = id + element;
+        if (idinsurrounding < 64 && idinsurrounding >= 0 && (board[idinsurrounding]['piece'].color != Player || isCaseEmpty(board[idinsurrounding].name) == true)) {
+            scope.push(idinsurrounding);
+        }
+    })
+    
+    return scope;
   }
 
   function checkValueInArrays(value, arrayOfArrays) {
@@ -340,7 +355,7 @@ Declare();
 function checkMove(input) {
     if (input.length === 2) {
         PawnMove = input;
-        console.log(PawnMove + " in checkMove");
+        console.log(PawnMove + " in checkPawnkMove");
         checkPawnMove(PawnMove); 
 
     } else if (input.length == 3) {
@@ -349,21 +364,27 @@ function checkMove(input) {
             checkKnightMove();
 
         } else if (input.charAt(0) == 'B') {
-            BishopMove = input; 
+            BishopMove = input;
+            BishopMove + " in checkBishopMove"
             checkBishopMove(BishopMove);
 
         } else if (input.charAt(0) == 'R') {
             RookMove = input; 
-            checkRookMove();
+            console.log(RookMove + " in checkRookMove");
+            checkRookMove(RookMove);
 
         } else if (input.charAt(0) == 'Q') {
-            BishopMove = input; 
-            checkQueenMove();
+            QueenMove = input; 
+            checkQueenMove(QueenMove);
 
         } else if (input.charAt(0) == 'K') {
-            BishopMove = input; 
-            checkKingMove();
+            KingMove = input; 
+            checkKingMove(KingMove);
 
+        }}}
+        
+        /** 
+        
         } else if (input == '0-0') {
             shortCastle();
         }
@@ -412,7 +433,7 @@ function checkMove(input) {
         } 
 
     }};
-
+*/
 
 // Pawn Move
 
@@ -552,6 +573,137 @@ function checkPMpossible(PawnMove) {
 
     //
 
+    function checkRookMove(RookMove) {
+        casetomove = checkRMpossible(RookMove);
+        console.log(casetomove);
+        let casetomoveto = RookMove.slice(-2);
+    
+        if (casetomove != false) {
+            movePiece(casetomove, casetomoveto);
+        } else {
+            console.log('Rook move is not possible')
+        }
+    }
+
+    function checkRMpossible(RookMove) {
+        let casetomoveto = RookMove.slice(-2);
+        let id = getIDofCase(casetomoveto);
+        console.log(id);
+        let lanes = [];
+        let possibleMoves = [];
+      
+        for (let i = 0; i < 64; i++) {
+          if (board[i]['piece'].type == 'rook' && board[i]['piece'].color == Player) {
+            console.log(i)
+            lanes = Lanes(board[i].name);
+            console.log(lanes)
+            inscope = checkValueInArrays(id, lanes);
+            console.log(inscope)
+            if (inscope == true) {
+              possibleMoves.push(board[i]['name']);
+              console.log(possibleMoves)
+              break;
+            }
+          }
+        }
+
+        console.log(possibleMoves);
+
+        if (possibleMoves.length === 0) {
+          console.log('No such rook move possible');
+          return false;
+        } else if (possibleMoves.length === 1) {
+          console.log('Move possible');
+          return possibleMoves[0];
+        } else {
+          console.log('More than one rook move possible');
+          return possibleMoves;
+        }
+      }
+    //
+
+    function checkQueenMove(QueenMove) {
+    casetomove = checkQMpossible(QueenMove);
+        console.log(casetomove);
+        let casetomoveto = QueenMove.slice(-2);
+    
+        if (casetomove != false) {
+            movePiece(casetomove, casetomoveto);
+        } else {
+            console.log('Queen move is not possible')
+        }
+    }
+
+    function checkQMpossible(QueenMove) {
+        let casetomoveto = QueenMove.slice(-2);
+        let id = getIDofCase(casetomoveto);
+        let diagonals = [];
+        let lanes = [];
+        let possibleMoves = [];
+      
+        for (let i = 0; i < 64; i++) {
+          if (board[i]['piece'].type == 'queen' && board[i]['piece'].color == Player) {
+            lanes = Lanes(board[i].name);
+            diagonals = Diagonals(board[i].name)
+            diagscope = checkValueInArrays(id, diagonals);
+            lanescope = checkValueInArrays(id, lanes);
+            if (lanescope == true || lanescope == true) {
+              possibleMoves.push(board[i]['name']);
+              console.log(possibleMoves)
+              break;
+            }
+          }
+        }
+
+        console.log(possibleMoves);
+
+        if (possibleMoves.length === 0) {
+          console.log('No such queen move possible');
+          return false;
+        } else if (possibleMoves.length === 1) {
+          console.log('Move possible');
+          return possibleMoves[0];
+        } else {
+          console.log('More than one queen move possible');
+          return possibleMoves;
+        }
+      }
+
+      //
+
+      function checkKingMove(KingMove) {
+        casetomove = checkKMpossible(KingMove);
+            console.log(casetomove);
+            let casetomoveto = KingMove.slice(-2);
+        
+            if (casetomove != false) {
+                movePiece(casetomove, casetomoveto);
+            } else {
+                console.log('King move is not possible')
+            }
+        }
+      
+
+      function checkKMpossible(KingMove) {
+        let casetomoveto = KingMove.slice(-2);
+        let id = getIDofCase(casetomoveto);
+        let casetomove = null;
+        
+      
+        for (let i = 0; i < 64; i++) {
+          if (board[i]['piece'].type == 'king' && board[i]['piece'].color == Player) {
+            let surroundings = Surroundings(board[i].name);
+            if (surroundings.includes(id)) {
+              casetomove = board[i].name;
+            } else {
+                return false;
+            }
+          }
+        }
+        return casetomove;
+      }
+    //
+
 
 
 
@@ -562,10 +714,4 @@ function movePiece(casetomove,casetomoveto) {
     console.log(idcasetomoveto);
     board[idcasetomoveto]['piece'] = board[idcasetomove]['piece'];
     board[idcasetomove]['piece'] = '';
-    console.log('Pawn moves to ' + PawnMove);
     }
-
-
-
-
-
