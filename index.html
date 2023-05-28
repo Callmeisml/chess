@@ -6,17 +6,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="chess.js"></script>
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Chess 2.1</title>
 </head>
+
 <body>
 
-<label for="input">Make your move</label>
+<div id="container1">
+    <div class="chessboard">
 
-<input type="text" id="moveInput" input="moveInput">
+        <div class="rank">
+            <div class="case light" id="a8"></div>
+            <div class="case dark" id="b8"></div>
+            <div class="case light" id="c8"></div>
+            <div class="case dark" id="d8"></div>
+            <div class="case light" id="e8"></div>
+            <div class="case dark" id="f8"></div>
+            <div class="case light" id="g8"></div>
+            <div class="case dark" id="h8"></div>
+        </div>
+    
+        <div class="rank">
+            <div class="case dark" id="a7"></div>
+            <div class="case light" id="b7"></div>
+            <div class="case dark" id="c7"></div>
+            <div class="case light" id="d7"></div>
+            <div class="case dark" id="e7"></div>
+            <div class="case light" id="f7"></div>
+            <div class="case dark" id="g7"></div>
+            <div class="case light" id="h7"></div>   
+        </div>
+    
+        <div class="rank">
+            <div class="case light" id="a6"></div>
+            <div class="case dark" id="b6"></div>
+            <div class="case light" id="c6"></div>
+            <div class="case dark" id="d6"></div>
+            <div class="case light" id="e6"></div>
+            <div class="case dark" id="f6"></div>
+            <div class="case light" id="g6"></div>
+            <div class="case dark" id="h6"></div>
+        </div>
+    
+        <div class="rank">
+            <div class="case dark" id="a5"></div>
+            <div class="case light" id="b5"></div>
+            <div class="case dark" id="c5"></div>
+            <div class="case light" id="d5"></div>
+            <div class="case dark" id="e5"></div>
+            <div class="case light" id="f5"></div>
+            <div class="case dark" id="g5"></div>
+            <div class="case light" id="h5"></div>   
+        </div>
+    
+        <div class="rank">
+            <div class="case light" id="a4"></div>
+            <div class="case dark" id="b4"></div>
+            <div class="case light" id="c4"></div>
+            <div class="case dark" id="d4"></div>
+            <div class="case light" id="e4"></div>
+            <div class="case dark" id="f4"></div>
+            <div class="case light" id="g4"></div>
+            <div class="case dark" id="h4"></div>
+        </div>
+    
+        <div class="rank">
+            <div class="case dark" id="a3"></div>
+            <div class="case light" id="b3"></div>
+            <div class="case dark" id="c3"></div>
+            <div class="case light" id="d3"></div>
+            <div class="case dark" id="e3"></div>
+            <div class="case light" id="f3"></div>
+            <div class="case dark" id="g3"></div>
+            <div class="case light" id="h3"></div>   
+        </div>
+    
+        <div class="rank">
+            <div class="case light" id="a2"></div>
+            <div class="case dark" id="b2"></div>
+            <div class="case light" id="c2"></div>
+            <div class="case dark" id="d2"></div>
+            <div class="case light" id="e2"></div>
+            <div class="case dark" id="f2"></div>
+            <div class="case light" id="g2"></div>
+            <div class="case dark" id="h2"></div>
+        </div>
+    
+        <div class="rank">
+            <div class="case dark" id="a1"></div>
+            <div class="case light" id="b1"></div>
+            <div class="case dark" id="c1"></div>
+            <div class="case light" id="d1"></div>
+            <div class="case dark" id="e1"></div>
+            <div class="case light" id="f1"></div>
+            <div class="case dark" id="g1"></div>
+            <div class="case light" id="h1"></div>   
+        </div>
+    
+    </div>
 
-<button>Submit</button>
+    <div id="sidecontainer">
 
-<p></p>
+        <div id="inputbox">
+            <label for="input">Make your move</label>
+            <input type="text" id="moveInput" input="moveInput">
+            <button>Submit</button>
+        </div>
+        
+        <div id="historybox">
+            <p></p>
+        </div>
+
+    </div>
+</div>
+
+
 
     
 </body>

@@ -1,6 +1,3 @@
-// html
-
-const para = document.querySelector('p');
 
 // board
 
@@ -159,160 +156,198 @@ function getIDofCase(valueToMatch) {
     return IDofCase; 
   }
 
-  function whatColorOfPiece(Case) {
-    console.log(`whatColorOfPiece is checking ${Case}`)
+function whatColorOfPiece(Case) {
     i = getIDofCase(Case);
     let colorofpiece = board[i]['piece'].color;
-    console.log(board[i]['piece'].color)
     return colorofpiece;
-  }
+}
 
-  function ULdiagonal(Case) {
+  // move patterns
+
+function ULdiagonal(Case) {
     let scope = [];
+    let color = whatColorOfPiece(Case);
     id = getIDofCase(Case);
     id = id - 7;
     while (id < 64 && id >= 0 && isCaseEmpty(board[id].name) == true) {
         scope.push(id);
         id = id - 7;
     } 
-    if (id < 64 && id >= 0 && board[id]['piece'].color != Player) {
+    if (id < 64 && id >= 0 && board[id]['piece'].color != color) {
         scope.push(id);
     } 
     return scope;
-  }
+}
 
-  function URdiagonal(Case) {
+function URdiagonal(Case) {
     let scope = [];
+    let color = whatColorOfPiece(Case);
     id = getIDofCase(Case);
     id = id + 9;
     while (id < 64 && id >= 0 &&  isCaseEmpty(board[id].name) == true) {
         scope.push(id);
         id = id + 9;
     } 
-    if (id < 64 && id >= 0 &&  board[id]['piece'].color != Player) {
+    if (id < 64 && id >= 0 &&  board[id]['piece'].color != color) {
         scope.push(id);
     } 
     return scope;
-  }
+}
 
-  function DLdiagonal(Case) {
+function DLdiagonal(Case) {
     let scope = [];
+    let color = whatColorOfPiece(Case);
     id = getIDofCase(Case);
     id = id - 9;
     while (id < 64 && id >= 0 && isCaseEmpty(board[id].name) == true) {
         scope.push(id);
         id = id - 9;
     } 
-    if (id < 64 && id >= 0 && board[id]['piece'].color != Player) {
+    if (id < 64 && id >= 0 && board[id]['piece'].color != color) {
         scope.push(id);
     } 
     return scope;
-  }
+}
 
-  function DRdiagonal(Case) {
+function DRdiagonal(Case) {
     let scope = [];
+    let color = whatColorOfPiece(Case);
     id = getIDofCase(Case);
     id = id + 7;
     while (id < 64 && id >= 0 && isCaseEmpty(board[id].name) == true) {
         scope.push(id);
         id = id + 7;
     } 
-    if (id < 64 && id >= 0 && board[id]['piece'].color != Player) {
+    if (id < 64 && id >= 0 && board[id]['piece'].color != color) {
         scope.push(id);
     } 
     return scope;
-  }
+}
 
-  function Diagonals(Case) {
+function Diagonals(Case) {
     let scopes = [];
     scopes.push(ULdiagonal(Case));
     scopes.push(URdiagonal(Case));
     scopes.push(DLdiagonal(Case));
     scopes.push(DRdiagonal(Case));
     return scopes;
-  }
+}
 
-  function uLane(Case) {
+function uLane(Case) {
     let scope = [];
+    let color = whatColorOfPiece(Case);
     id = getIDofCase(Case);
     id = id + 1;
     while (id < 64 && id >= 0 && isCaseEmpty(board[id].name) == true) {
         scope.push(id);
         id = id + 1;
     } 
-    if (id < 64 && id >= 0 && board[id]['piece'].color != Player) {
+    if (id < 64 && id >= 0 && board[id]['piece'].color != color) {
         scope.push(id);
     } 
     return scope;
-  }
+}
 
-  function lLane(Case) {
+function lLane(Case) {
     let scope = [];
+    let color = whatColorOfPiece(Case);
     id = getIDofCase(Case);
     id = id - 8;
     while (id < 64 && id >= 0 && isCaseEmpty(board[id].name) == true) {
         scope.push(id);
         id = id - 8;
     } 
-    if (id < 64 && id >= 0 && board[id]['piece'].color != Player) {
+    if (id < 64 && id >= 0 && board[id]['piece'].color != color) {
         scope.push(id);
     } 
     return scope;
-  }
+}
 
-  function rLane(Case) {
+function rLane(Case) {
     let scope = [];
+    let color = whatColorOfPiece(Case);
     id = getIDofCase(Case);
     id = id + 8;
     while (id < 64 && id >= 0 && isCaseEmpty(board[id].name) == true) {
         scope.push(id);
         id = id + 8;
     } 
-    if (id < 64 && id >= 0 && board[id]['piece'].color != Player) {
+    if (id < 64 && id >= 0 && board[id]['piece'].color != color) {
         scope.push(id);
     } 
     return scope;
-  }
+}
 
-  function dLane(Case) {
+function dLane(Case) {
     let scope = [];
+    let color = whatColorOfPiece(Case);
     id = getIDofCase(Case);
     id = id - 1;
     while (id < 64 && id >= 0 && isCaseEmpty(board[id].name) == true) {
         scope.push(id);
         id = id - 1;
     } 
-    if (id < 64 && id >= 0 && board[id]['piece'].color != Player) {
+    if (id < 64 && id >= 0 && board[id]['piece'].color != color) {
         scope.push(id);
     } 
     return scope;
-  }
+}
 
-  function Lanes(Case) {
+function Lanes(Case) {
     let scopes = [];
     scopes.push(uLane(Case));
     scopes.push(lLane(Case));
     scopes.push(rLane(Case));
     scopes.push(dLane(Case));
     return scopes;
-  }
+}
 
-  function Surroundings(Case) {
+function Surroundings(Case) {
     let scope = [];
+    let color = whatColorOfPiece(Case);
     id = getIDofCase(Case);
     surroundings = [];
     directions = [-7, 1, 9, -8, 8, -9, -1, 7];
     directions.forEach( element => {
         let idinsurrounding = id + element;
-        if (idinsurrounding < 64 && idinsurrounding >= 0 && (board[idinsurrounding]['piece'].color != Player || isCaseEmpty(board[idinsurrounding].name) == true)) {
+        if (idinsurrounding < 64 && idinsurrounding >= 0 && (board[idinsurrounding]['piece'].color != color || isCaseEmpty(board[idinsurrounding].name) == true)) {
             scope.push(idinsurrounding);
         }
     })
-    
     return scope;
-  }
+}
 
-  function checkValueInArrays(value, arrayOfArrays) {
+function Lshapes(Case) {
+    let scope = [];
+    let color = whatColorOfPiece(Case);
+    id = getIDofCase(Case);
+    lshape = [];
+    directions = [-15, -6, 10, 17, -17, -10, 6, 15];
+    directions.forEach( element => {
+        let idtargetcase = id + element;
+        if (idtargetcase < 64 && idtargetcase >=0 && (board[idtargetcase]['piece'].color != color || isCaseEmpty(board[idtargetcase].name) == true)) {
+            scope.push(idtargetcase);
+        }
+    })
+    return scope;
+}
+
+function PawnScope(Case) {
+    let scope = [];
+    let color = whatColorOfPiece(Case);
+    id = getIDofCase(Case);
+    surroundings = [];
+    directions = [-7, 9];
+    directions.forEach( element => {
+        let idinpawnscope = id + element;
+        if (idinpawnscope < 64 && idinpawnscope >= 0 && (board[idinpawnscope]['piece'].color != color || isCaseEmpty(board[idinpawnscope].name) == true)) {
+            scope.push(idinpawnscope);
+        }
+    })
+    return scope;
+}
+
+function checkValueInArrays(value, arrayOfArrays) {
     for (let i = 0; i < arrayOfArrays.length; i++) {
       const innerArray = arrayOfArrays[i];
       if (innerArray.includes(value)) {
@@ -320,10 +355,53 @@ function getIDofCase(valueToMatch) {
       }
     }
     return false;
-  }
+}
 
-  let casetomove;
-  let PawnMove;
+let casetomove;
+let PawnMove;
+
+// html
+
+// Array of image filenames or URLs
+
+const images = {
+    rook: { white: 'Chess_rlt60.png', black: 'Chess_rdt60.png' },
+    knight: { white: 'Chess_nlt60.png', black: 'Chess_ndt60.png' },
+    bishop: { white: 'Chess_blt60.png', black: 'Chess_bdt60.png' },
+    queen: { white: 'Chess_qlt60.png', black: 'Chess_qdt60.png' },
+    king: { white: 'Chess_klt60.png', black: 'Chess_kdt60.png' },
+    pawn: { white: 'Chess_plt60.png', black: 'Chess_pdt60.png' }
+};
+   
+// ... add mappings for other piece types and colors
+function refreshBoard() {
+    let n = 0;
+    for (let i = 0; i <= 7; i++) {
+        for (let j = 0; j <= 7; j++) {
+            const position = String.fromCharCode(97 + i) + (j+1);
+            const targetDiv = document.getElementById(position);
+
+            console.log(position);
+      
+
+            const k = (i + j + n);
+      
+            if (board[k].piece) {
+                const type = board[k].piece.type;
+                const color = board[k].piece.color;
+                const imageFileName = images[type][color];
+      
+                const imgElement = document.createElement("img");
+                imgElement.src = imageFileName;
+                imgElement.alt = `${color} ${type}`;
+      
+                targetDiv.appendChild(imgElement);
+            }
+        }
+        n = n + 7;
+    }
+}
+
 
 
 //start of the game 
@@ -335,12 +413,8 @@ function Declare() {
     console.log('You played: ' + input);
     console.log(input.length);
     if (input) {
-        changeGameHistory();
-        console.log(gameHistory);
         checkMove(input);
-        Player === 'white' ? Player = 'black': Player = 'white';
-        if (Player == 'white') {Turn++;}
-        Declare();
+        endTurn();
     } else {
         console.log("No play");
         Turn = 0;
@@ -349,6 +423,7 @@ function Declare() {
 }
 
 Declare();
+// Declare();
 
 // checkMove
 
@@ -361,7 +436,7 @@ function checkMove(input) {
     } else if (input.length == 3) {
         if (input.charAt(0) == 'N') {
             KnightMove = input;
-            checkKnightMove();
+            checkKnightMove(KnightMove);
 
         } else if (input.charAt(0) == 'B') {
             BishopMove = input;
@@ -381,8 +456,37 @@ function checkMove(input) {
             KingMove = input; 
             checkKingMove(KingMove);
 
-        }}}
-        
+        }
+    
+    } else if (input.length == 4) {
+        if ((input.charAt(0) == 'N') && (input.charAt(1) == 'x')) {
+            KnightMove = input;
+            checkKnightMove(KnightMove);
+
+        } else if ((input.charAt(0) == 'B') && (input.charAt(1) == 'x')) {
+            BishopMove = input; 
+            checkBishopMove(BishopMove);
+
+        } else if ((input.charAt(0) == 'R') && (input.charAt(1) == 'x')) {
+            RookMove = input;
+            checkRookMove(RookMove);
+
+        } else if ((input.charAt(0) == 'Q') && (input.charAt(1) == 'x')) {
+            QueenMove = input; 
+            checkQueenMove(QueenMove);
+
+        } else if ((input.charAt(0) == 'K') && (input.charAt(1) == 'x')) {
+            KingMove = input; 
+            checkKingMove(KingMove);
+
+        } else if (file.includes(input.charAt(0)) && input.charAt(1) == 'x') {
+            PawnMove = input;
+            checkPawnCaptures(PawnMove);
+        }
+    }
+}
+    
+    
         /** 
         
         } else if (input == '0-0') {
@@ -445,13 +549,44 @@ function checkPawnMove(PawnMove) {
         movePiece(casetomove, PawnMove);
     } else {
         console.log('Pawn move is not possible')
+        replayMove();
+    }
+}
+
+function checkPawnCaptures(PawnMove) {
+    casetomove = checkPCpossible(PawnMove);
+
+    if (casetomove != false) {
+        movePiece(casetomove, PawnMove);
+    } else {
+        console.log('Pawn move is not possible')
+        replayMove();
+    }
+}
+
+function checkPCpossible(PawnMove) {
+    let pawncapturing = PawnMove.slice(0);
+    let casetomoveto = PawnMove.slice(-2);
+    id = getIDofCase(casetomoveto);
+    let casechecked; 
+    for (let i = 0; i < 64; i++) {
+        casechecked = board[i].name;
+        file = casechecked.charAt(0);
+        if (board[i]['piece'].type == 'pawn' && board[i]['piece'].color == Player && file == pawncapturing) {
+            let pawnscope = PawnScope(board[i].name); 
+            if (checkValueInArrays(id, pawnscope) == true) {
+                casetomove = board[i]['name'];
+            } else {
+                return false;
+            }
+            return casetomove;
+        }
     }
 }
 
 
 
 function checkPMpossible(PawnMove) {
-
     let possible;
     console.log(`${PawnMove} in checkPMpossible`);
     let empty = isCaseEmpty(PawnMove);
@@ -533,165 +668,173 @@ function checkPMpossible(PawnMove) {
     console.log(Player + ' ' + whatColorOfPiece(casetomove))
     console.log(empty);
     console.log(possible);
+
     if ((possible == true) && (empty == true)) {
         return casetomove;
     } else {
         return false;
     }
-
-    }
+}
 
     // Bishop Move
 
-    function checkBishopMove(BishopMove) {
-        casetomove = checkBMpossible(BishopMove);
-        console.log(casetomove);
-        let casetomoveto = BishopMove.slice(-2);
+function checkBishopMove(BishopMove) {
+    casetomove = checkBMpossible(BishopMove);
+    console.log(casetomove);
+    let casetomoveto = BishopMove.slice(-2);
     
-        if (casetomove != false) {
-            movePiece(casetomove, casetomoveto);
-        } else {
-            console.log('Bishop move is not possible')
-        }
+    if (casetomove != false) {
+        movePiece(casetomove, casetomoveto);
+    } else {
+        console.log('Bishop move is not possible')
+        replayMove();
     }
+}
 
-    function checkBMpossible(BishopMove) { 
-        let casetomoveto = BishopMove.slice(-2);
-        id = getIDofCase(casetomoveto);
-        counter = 0; 
-        for (let i = 0; i < 64; i++) {
-            if (board[i]['piece'].type == 'bishop' && board[i]['piece'].color == Player) {
-                let diagonals = Diagonals(board[i].name); 
-                if (checkValueInArrays(id, diagonals) == true) {
-                    counter++;
-                    casetomove = board[i]['name'];
-                } 
-                return casetomove;
-            }
-        }
-        }
+function checkBMpossible(BishopMove) { 
+    let casetomoveto = BishopMove.slice(-2);
+    let id = getIDofCase(casetomoveto);
+    let diagonals = [];
+    let possibleMoves = [];
 
-    //
-
-    function checkRookMove(RookMove) {
-        casetomove = checkRMpossible(RookMove);
-        console.log(casetomove);
-        let casetomoveto = RookMove.slice(-2);
-    
-        if (casetomove != false) {
-            movePiece(casetomove, casetomoveto);
-        } else {
-            console.log('Rook move is not possible')
-        }
-    }
-
-    function checkRMpossible(RookMove) {
-        let casetomoveto = RookMove.slice(-2);
-        let id = getIDofCase(casetomoveto);
-        console.log(id);
-        let lanes = [];
-        let possibleMoves = [];
-      
-        for (let i = 0; i < 64; i++) {
-          if (board[i]['piece'].type == 'rook' && board[i]['piece'].color == Player) {
-            console.log(i)
-            lanes = Lanes(board[i].name);
-            console.log(lanes)
+    for (let i = 0; i < 64; i++) {
+        if (board[i]['piece'].type == 'bishop' && board[i]['piece'].color == Player) {
+            diagonals = Diagonals(board[i].name);
             inscope = checkValueInArrays(id, lanes);
-            console.log(inscope)
             if (inscope == true) {
               possibleMoves.push(board[i]['name']);
-              console.log(possibleMoves)
               break;
             }
-          }
-        }
-
-        console.log(possibleMoves);
-
-        if (possibleMoves.length === 0) {
-          console.log('No such rook move possible');
-          return false;
-        } else if (possibleMoves.length === 1) {
-          console.log('Move possible');
-          return possibleMoves[0];
-        } else {
-          console.log('More than one rook move possible');
-          return possibleMoves;
-        }
-      }
-    //
-
-    function checkQueenMove(QueenMove) {
-    casetomove = checkQMpossible(QueenMove);
-        console.log(casetomove);
-        let casetomoveto = QueenMove.slice(-2);
-    
-        if (casetomove != false) {
-            movePiece(casetomove, casetomoveto);
-        } else {
-            console.log('Queen move is not possible')
         }
     }
 
-    function checkQMpossible(QueenMove) {
-        let casetomoveto = QueenMove.slice(-2);
-        let id = getIDofCase(casetomoveto);
-        let diagonals = [];
-        let lanes = [];
-        let possibleMoves = [];
+    if (possibleMoves.length === 0) {
+        console.log('No such bishop move possible');
+        return false;
+    } else if (possibleMoves.length === 1) {
+        console.log('Move possible');
+        return possibleMoves[0];
+    } else {
+        console.log('More than one bishop move possible');
+        replayMove();
+    }
+}
+
+    //
+
+function checkRookMove(RookMove) {
+    casetomove = checkRMpossible(RookMove);
+    console.log(casetomove);
+    let casetomoveto = RookMove.slice(-2);
+    
+    if (casetomove != false) {
+        movePiece(casetomove, casetomoveto);
+    } else {
+        console.log('Rook move is not possible');
+        replayMove();
+    }
+}
+
+function checkRMpossible(RookMove) {
+    let casetomoveto = RookMove.slice(-2);
+    let id = getIDofCase(casetomoveto);
+    let lanes = [];
+    let possibleMoves = [];
       
-        for (let i = 0; i < 64; i++) {
-          if (board[i]['piece'].type == 'queen' && board[i]['piece'].color == Player) {
+    for (let i = 0; i < 64; i++) {
+        if (board[i]['piece'].type == 'rook' && board[i]['piece'].color == Player) {
             lanes = Lanes(board[i].name);
-            diagonals = Diagonals(board[i].name)
+            inscope = checkValueInArrays(id, lanes);
+            if (inscope == true) {
+              possibleMoves.push(board[i]['name']);
+              break;
+            }
+        }
+    }
+
+    if (possibleMoves.length === 0) {
+        console.log('No such rook move possible');
+        return false;
+    } else if (possibleMoves.length === 1) {
+        console.log('Move possible');
+        return possibleMoves[0];
+    } else {
+        console.log('More than one rook move possible');
+        replayMove();
+    }
+}
+    //
+
+function checkQueenMove(QueenMove) {
+    casetomove = checkQMpossible(QueenMove);
+    console.log(casetomove);
+    let casetomoveto = QueenMove.slice(-2);
+    
+    if (casetomove != false) {
+        movePiece(casetomove, casetomoveto);
+    } else {
+        console.log('Queen move is not possible');
+        replayMove();
+    }
+}
+
+function checkQMpossible(QueenMove) {
+    let casetomoveto = QueenMove.slice(-2);
+    let id = getIDofCase(casetomoveto);
+    let diagonals = [];
+    let lanes = [];
+    let possibleMoves = [];
+      
+    for (let i = 0; i < 64; i++) {
+        if (board[i]['piece'].type == 'queen' && board[i]['piece'].color == Player) {
+            lanes = Lanes(board[i].name);
+            diagonals = Diagonals(board[i].name);
             diagscope = checkValueInArrays(id, diagonals);
             lanescope = checkValueInArrays(id, lanes);
             if (lanescope == true || lanescope == true) {
-              possibleMoves.push(board[i]['name']);
-              console.log(possibleMoves)
-              break;
+                possibleMoves.push(board[i]['name']);
+                console.log(possibleMoves)
+                break;
             }
-          }
         }
+    }
 
-        console.log(possibleMoves);
-
-        if (possibleMoves.length === 0) {
-          console.log('No such queen move possible');
-          return false;
-        } else if (possibleMoves.length === 1) {
-          console.log('Move possible');
-          return possibleMoves[0];
-        } else {
-          console.log('More than one queen move possible');
-          return possibleMoves;
-        }
-      }
+    if (possibleMoves.length === 0) {
+        console.log('No such queen move possible');
+        return false;
+    } else if (possibleMoves.length === 1) {
+        console.log('Move possible');
+        return possibleMoves[0];
+    } else {
+        console.log('More than one queen move possible');
+        return possibleMoves;
+    }
+}
 
       //
 
-      function checkKingMove(KingMove) {
-        casetomove = checkKMpossible(KingMove);
-            console.log(casetomove);
-            let casetomoveto = KingMove.slice(-2);
+function checkKingMove(KingMove) {
+    casetomove = checkKMpossible(KingMove);
+    console.log(casetomove);
+    let casetomoveto = KingMove.slice(-2);
         
-            if (casetomove != false) {
-                movePiece(casetomove, casetomoveto);
-            } else {
-                console.log('King move is not possible')
-            }
-        }
+    if (casetomove != false) {
+        movePiece(casetomove, casetomoveto);
+    } else {
+        console.log('King move is not possible')
+        replayMove();
+    }
+}
       
 
-      function checkKMpossible(KingMove) {
-        let casetomoveto = KingMove.slice(-2);
-        let id = getIDofCase(casetomoveto);
-        let casetomove = null;
+function checkKMpossible(KingMove) {
+    let casetomoveto = KingMove.slice(-2);
+    let id = getIDofCase(casetomoveto);
+    let casetomove = null;
         
       
-        for (let i = 0; i < 64; i++) {
-          if (board[i]['piece'].type == 'king' && board[i]['piece'].color == Player) {
+    for (let i = 0; i < 64; i++) {
+        if (board[i]['piece'].type == 'king' && board[i]['piece'].color == Player) {
             let surroundings = Surroundings(board[i].name);
             if (surroundings.includes(id)) {
               casetomove = board[i].name;
@@ -699,13 +842,53 @@ function checkPMpossible(PawnMove) {
                 return false;
             }
           }
-        }
+    }
         return casetomove;
-      }
+}
     //
 
+function checkKnightMove(KnightMove) {
+    casetomove = checkNMpossible(KnightMove);
+    console.log(casetomove);
+    let casetomoveto = KnightMove.slice(-2);
+        
+     if (casetomove != false) {
+        movePiece(casetomove, casetomoveto);
+    } else {
+        console.log('Knight move is not possible')
+        replayMove();
+    }
+}
+      
+function checkNMpossible(KnightMove) {
+    let casetomoveto = KnightMove.slice(-2);
+    let id = getIDofCase(casetomoveto);
+        let possibleMoves = [];
+        
+      
+    for (let i = 0; i < 64; i++) {
+        if (board[i]['piece'].type == 'knight' && board[i]['piece'].color == Player) {
+            let scope = Lshapes(board[i].name)
+            if (scope.includes(id) == true) {
+                possibleMoves.push(board[i]['name']);
+                break;
+            }
+        }
+    }
 
+    if (possibleMoves.length === 0) {
+        console.log('No such knight move possible');
+        return false;
+    } else if (possibleMoves.length === 1) {
+        console.log('Move possible');
+        return possibleMoves[0];
+    } else {
+        console.log('More than one knight move possible');
+        return possibleMoves;
+    }
+}
 
+    //
 
 function movePiece(casetomove,casetomoveto) {
     let idcasetomove = getIDofCase(casetomove);
@@ -714,4 +897,75 @@ function movePiece(casetomove,casetomoveto) {
     console.log(idcasetomoveto);
     board[idcasetomoveto]['piece'] = board[idcasetomove]['piece'];
     board[idcasetomove]['piece'] = '';
+}
+
+function replayMove() {
+    console.log("This move is not possible");
+    input = prompt("What is your move ?", '');
+    checkMove(input);
+}
+
+function endTurn() {
+    changeGameHistory();
+    console.log(gameHistory);
+    Player === 'white' ? Player = 'black': Player = 'white';
+    if (Player == 'white') {Turn++;}
+    Declare();
+}
+
+function isKingInCheck() {
+    let color = Player;
+    let enemycolor;
+    id = findKing(color);
+    if (color == 'white') {
+        enemycolor = 'black';
+    } else {
+        enemycolor = 'white';
     }
+    let allscopes = allScopes(color);
+    checkValueInArrays(id, allscopes);
+    
+}
+
+function findKing(color) {
+    for (let i = 0; i < 64; i++) {
+      if (board[i]['piece'].color === color && board[i]['piece'].type === king) {
+        return board[i].name;
+      }
+    }
+    return null;
+}
+
+function allScopes(color) {
+    let allscopes = [];
+    let lanes;
+    let diagonals; 
+    let lshapes;
+    let surroundings;
+    for (let i = 0; i < 64; i++) {
+        if (board[i]['piece'].type == 'queen' && board[i]['piece'].color == color) {
+            lanes = Lanes(board[i].name);
+            diagonals = Diagonals(board[i].name);
+            diagscope = checkValueInArrays(id, diagonals);
+            lanescope = checkValueInArrays(id, lanes);
+            allscopes.push(diagscope);
+            allscopes.push(lanesscope)
+        } else if (board[i]['piece'].type == 'bishop' && board[i]['piece'].color == color) {
+            diagonals = Diagonals(board[i].name);
+            allscopes.push(diagonals);
+        } else if (board[i]['piece'].type == 'rook' && board[i]['piece'].color == color) {
+            lanes = Lanes(board[i].name);
+            allscopes.push(lanes);
+        } else if (board[i]['piece'].type == 'knight' && board[i]['piece'].color == color) {
+            lshapes = Lshapes(board[i].name);
+            allscopes.push(lshapes);
+        } else if (board[i]['piece'].type == 'king' && board[i]['piece'].color == color) {
+            surroundings = Surroundings(board[i].name);
+            allscopes.push(surroundings);
+        } else if (board[i]['piece'].type == 'pawn' && board[i]['piece'].color == color) {
+            pawnscope = PawnScope(board[i].name);
+            allscopes.push(pawnscope);
+        }
+    return allscopes;
+    }
+}

@@ -1,3 +1,44 @@
+
+* {
+    border: solid purple 1px;
+}
+
+.chessboard {
+    display: flex;
+    height: 50em;
+    justify-content: center;
+    flex-flow: row wrap;
+    margin: auto;
+  }
+
+  .rank {
+    display: flex;
+    height: 12.5%;
+    width: 50em;
+  }
+
+.case {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    width: 12.5%;
+    height: 100%;
+    margin: auto;
+}
+
+.light {
+    background-color: rgb(236, 197, 203);
+    
+
+}
+
+.dark {
+    background-color: rgb(38, 5, 57);
+
+}
+
+
 input {
     display: block;
 }
