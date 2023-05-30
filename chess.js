@@ -121,8 +121,7 @@ function changeGameHistory() {
         gameHistory.push((" " + Turn + ". " + input + " "));
     } else if (Player == 'black') {
         gameHistory.push((" ." + input + " "));
-    }
-    
+    }   
 }
 
 function searchPieceInBoard(array, propertyToCheck, valueToMatch, lookupProperty, typetocheck) {
@@ -132,7 +131,7 @@ function searchPieceInBoard(array, propertyToCheck, valueToMatch, lookupProperty
       }
     } 
     return false;
-  }
+}
 
 function isCaseEmpty(valueToMatch) {
     let empty;
@@ -143,7 +142,7 @@ function isCaseEmpty(valueToMatch) {
       } 
     } 
     return empty; 
-  }
+}
 
 function getIDofCase(valueToMatch) {
     let IDofCase;
@@ -154,7 +153,7 @@ function getIDofCase(valueToMatch) {
       } 
     } 
     return IDofCase; 
-  }
+}
 
 function whatColorOfPiece(Case) {
     i = getIDofCase(Case);
@@ -162,7 +161,7 @@ function whatColorOfPiece(Case) {
     return colorofpiece;
 }
 
-  // move patterns
+// move patterns
 
 function ULdiagonal(Case) {
     let scope = [];
@@ -333,17 +332,25 @@ function Lshapes(Case) {
 }
 
 function PawnScope(Case) {
+    console.log('checking pawnscope of ' + Case)
     let scope = [];
     let color = whatColorOfPiece(Case);
     id = getIDofCase(Case);
-    surroundings = [];
-    directions = [-7, 9];
-    directions.forEach( element => {
+    let directionsWhite = [-7, 9];
+    let directionsBlack = [-9, 7];
+    if (color == 'white') {
+        directionsWhite.forEach( element => {
         let idinpawnscope = id + element;
+        console.log(idinpawnscope);
         if (idinpawnscope < 64 && idinpawnscope >= 0 && (board[idinpawnscope]['piece'].color != color || isCaseEmpty(board[idinpawnscope].name) == true)) {
-            scope.push(idinpawnscope);
-        }
-    })
+            scope.push(idinpawnscope);}})
+    } else if (color == 'black') { 
+        directionsBlack.forEach( element => {
+        let idinpawnscope = id + element;
+        console.log(idinpawnscope);
+        if (idinpawnscope < 64 && idinpawnscope >= 0 && (board[idinpawnscope]['piece'].color != color || isCaseEmpty(board[idinpawnscope].name) == true)) {
+            scope.push(idinpawnscope);}})
+    }
     return scope;
 }
 
@@ -355,6 +362,94 @@ function checkValueInArrays(value, arrayOfArrays) {
       }
     }
     return false;
+}
+
+function checkValueInArray(value, array) {
+    if (array.includes(value)) {
+        return true;
+    }
+    return false;
+}
+
+function movePiece(casetomove,casetomoveto) {
+    let idcasetomove = getIDofCase(casetomove);
+    let idcasetomoveto = getIDofCase(casetomoveto);
+    console.log(idcasetomove);
+    console.log(idcasetomoveto);
+    board[idcasetomoveto]['piece'] = board[idcasetomove]['piece'];
+    board[idcasetomove]['piece'] = '';
+}
+
+function replayMove() {
+    console.log("This move is not possible");
+    input = prompt("What is your move ?", '');
+    checkMove(input);
+}
+
+function endTurn() {
+    changeGameHistory();
+    console.log(gameHistory);
+    Player === 'white' ? Player = 'black': Player = 'white';
+    if (Player == 'white') {Turn++;}
+    refreshBoard();
+    Declare();
+}
+
+function isKingInCheck() {
+    let color = Player;
+    let enemycolor;
+    id = findKing(color);
+    if (color == 'white') {
+        enemycolor = 'black';
+    } else {
+        enemycolor = 'white';
+    }
+    let allscopes = allScopes(color);
+    checkValueInArrays(id, allscopes);
+    
+}
+
+function findKing(color) {
+    for (let i = 0; i < 64; i++) {
+      if (board[i]['piece'].color === color && board[i]['piece'].type === king) {
+        return board[i].name;
+      }
+    }
+    return null;
+}
+
+function allScopes(color) {
+    let allscopes = [];
+    let lanes;
+    let diagonals; 
+    let lshapes;
+    let surroundings;
+    for (let i = 0; i < 64; i++) {
+        if (board[i]['piece'].type == 'queen' && board[i]['piece'].color == color) {
+            lanes = Lanes(board[i].name);
+            diagonals = Diagonals(board[i].name);
+            diagscope = checkValueInArrays(id, diagonals);
+            lanescope = checkValueInArrays(id, lanes);
+            allscopes.push(diagscope);
+            allscopes.push(lanesscope)
+        } else if (board[i]['piece'].type == 'bishop' && board[i]['piece'].color == color) {
+            diagonals = Diagonals(board[i].name);
+            allscopes.push(diagonals);
+        } else if (board[i]['piece'].type == 'rook' && board[i]['piece'].color == color) {
+            lanes = Lanes(board[i].name);
+            allscopes.push(lanes);
+        } else if (board[i]['piece'].type == 'knight' && board[i]['piece'].color == color) {
+            lshapes = Lshapes(board[i].name);
+            allscopes.push(lshapes);
+        } else if (board[i]['piece'].type == 'king' && board[i]['piece'].color == color) {
+            surroundings = Surroundings(board[i].name);
+            allscopes.push(surroundings);
+        } else if (board[i]['piece'].type == 'pawn' && board[i]['piece'].color == color) {
+            pawnscope = PawnScope(board[i].name);
+            allscopes.push(pawnscope);
+        }
+    return allscopes;
+    }
 }
 
 let casetomove;
@@ -378,11 +473,13 @@ function refreshBoard() {
     let n = 0;
     for (let i = 0; i <= 7; i++) {
         for (let j = 0; j <= 7; j++) {
+
             const position = String.fromCharCode(97 + i) + (j+1);
             const targetDiv = document.getElementById(position);
 
-            console.log(position);
-      
+            if (targetDiv.hasChildNodes()) {
+                targetDiv.removeChild(targetDiv.firstChild);
+            }
 
             const k = (i + j + n);
       
@@ -402,8 +499,6 @@ function refreshBoard() {
     }
 }
 
-
-
 //start of the game 
 
 function Declare() {
@@ -422,8 +517,11 @@ function Declare() {
     }
 }
 
-Declare();
-// Declare();
+
+document.addEventListener('DOMContentLoaded', function() {
+    refreshBoard();
+    Declare();
+});
 
 // checkMove
 
@@ -480,6 +578,7 @@ function checkMove(input) {
             checkKingMove(KingMove);
 
         } else if (file.includes(input.charAt(0)) && input.charAt(1) == 'x') {
+            console.log('In checkMove sending to checkPawnCaptures')
             PawnMove = input;
             checkPawnCaptures(PawnMove);
         }
@@ -542,7 +641,6 @@ function checkMove(input) {
 // Pawn Move
 
 function checkPawnMove(PawnMove) {
-    
     casetomove = checkPMpossible(PawnMove);
 
     if (casetomove != false) {
@@ -555,36 +653,38 @@ function checkPawnMove(PawnMove) {
 
 function checkPawnCaptures(PawnMove) {
     casetomove = checkPCpossible(PawnMove);
+    console.log(PawnMove + ' in checkPawnCaptures');
+    console.log('Case to move is ' + casetomove);
 
     if (casetomove != false) {
-        movePiece(casetomove, PawnMove);
+        console.log('checkPawnCaptures possible');
+        let casetomoveto = PawnMove.slice(-2);
+        movePiece(casetomove, casetomoveto);
     } else {
-        console.log('Pawn move is not possible')
+        console.log('Pawn capture is not possible');
         replayMove();
     }
 }
 
 function checkPCpossible(PawnMove) {
-    let pawncapturing = PawnMove.slice(0);
+
+    console.log(PawnMove + ' in PC possible');
+    let pawncapturing = PawnMove.charAt(0);
     let casetomoveto = PawnMove.slice(-2);
-    id = getIDofCase(casetomoveto);
-    let casechecked; 
+    let id = getIDofCase(casetomoveto);
+    let casetomove = false; 
+
     for (let i = 0; i < 64; i++) {
-        casechecked = board[i].name;
-        file = casechecked.charAt(0);
-        if (board[i]['piece'].type == 'pawn' && board[i]['piece'].color == Player && file == pawncapturing) {
-            let pawnscope = PawnScope(board[i].name); 
-            if (checkValueInArrays(id, pawnscope) == true) {
-                casetomove = board[i]['name'];
-            } else {
-                return false;
+        if (board[i].piece.type == 'pawn' && board[i].piece.color == Player && board[i].name.charAt(0) == pawncapturing) {
+            console.log('checking the pawnscope of ' + board[i].name);
+            let pawnscope = PawnScope(board[i].name);
+            if (pawnscope.includes(id)) {
+                casetomove = board[i].name;
             }
-            return casetomove;
         }
     }
+    return casetomove; 
 }
-
-
 
 function checkPMpossible(PawnMove) {
     let possible;
@@ -596,7 +696,8 @@ function checkPMpossible(PawnMove) {
     if (Player == 'white') {
 
         pawnfile = PawnMove.charAt(0);
-        pawnrank = (PawnMove.charAt(1) - 1);
+        pr = parseInt(PawnMove.charAt(1));
+        pawnrank = (pr - 1);
 
         if (PawnMove.charAt(1) == 4) { 
             if (searchPieceInBoard(board, "piece", `${pawnfile}3`, 'name', 'pawn') == true) {
@@ -631,7 +732,8 @@ function checkPMpossible(PawnMove) {
     } else if (Player == 'black') {
 
         pawnfile = PawnMove.charAt(0);
-        pawnrank = (PawnMove.charAt(1) + 1);
+        pr = parseInt(PawnMove.charAt(1));
+        pawnrank = (pr + 1);
 
         if (PawnMove.charAt(1) == 5) { 
             if (searchPieceInBoard(board, "piece", `${pawnfile}6`, 'name', 'pawn') == true) {
@@ -700,7 +802,7 @@ function checkBMpossible(BishopMove) {
     for (let i = 0; i < 64; i++) {
         if (board[i]['piece'].type == 'bishop' && board[i]['piece'].color == Player) {
             diagonals = Diagonals(board[i].name);
-            inscope = checkValueInArrays(id, lanes);
+            inscope = checkValueInArrays(id, diagonals);
             if (inscope == true) {
               possibleMoves.push(board[i]['name']);
               break;
@@ -720,7 +822,7 @@ function checkBMpossible(BishopMove) {
     }
 }
 
-    //
+    // Rook Move
 
 function checkRookMove(RookMove) {
     casetomove = checkRMpossible(RookMove);
@@ -763,7 +865,7 @@ function checkRMpossible(RookMove) {
         replayMove();
     }
 }
-    //
+    // Queen Move
 
 function checkQueenMove(QueenMove) {
     casetomove = checkQMpossible(QueenMove);
@@ -811,7 +913,7 @@ function checkQMpossible(QueenMove) {
     }
 }
 
-      //
+    // King Move
 
 function checkKingMove(KingMove) {
     casetomove = checkKMpossible(KingMove);
@@ -845,7 +947,7 @@ function checkKMpossible(KingMove) {
     }
         return casetomove;
 }
-    //
+    // Knight Move
 
 function checkKnightMove(KnightMove) {
     casetomove = checkNMpossible(KnightMove);
@@ -888,84 +990,3 @@ function checkNMpossible(KnightMove) {
     }
 }
 
-    //
-
-function movePiece(casetomove,casetomoveto) {
-    let idcasetomove = getIDofCase(casetomove);
-    let idcasetomoveto = getIDofCase(casetomoveto);
-    console.log(idcasetomove);
-    console.log(idcasetomoveto);
-    board[idcasetomoveto]['piece'] = board[idcasetomove]['piece'];
-    board[idcasetomove]['piece'] = '';
-}
-
-function replayMove() {
-    console.log("This move is not possible");
-    input = prompt("What is your move ?", '');
-    checkMove(input);
-}
-
-function endTurn() {
-    changeGameHistory();
-    console.log(gameHistory);
-    Player === 'white' ? Player = 'black': Player = 'white';
-    if (Player == 'white') {Turn++;}
-    Declare();
-}
-
-function isKingInCheck() {
-    let color = Player;
-    let enemycolor;
-    id = findKing(color);
-    if (color == 'white') {
-        enemycolor = 'black';
-    } else {
-        enemycolor = 'white';
-    }
-    let allscopes = allScopes(color);
-    checkValueInArrays(id, allscopes);
-    
-}
-
-function findKing(color) {
-    for (let i = 0; i < 64; i++) {
-      if (board[i]['piece'].color === color && board[i]['piece'].type === king) {
-        return board[i].name;
-      }
-    }
-    return null;
-}
-
-function allScopes(color) {
-    let allscopes = [];
-    let lanes;
-    let diagonals; 
-    let lshapes;
-    let surroundings;
-    for (let i = 0; i < 64; i++) {
-        if (board[i]['piece'].type == 'queen' && board[i]['piece'].color == color) {
-            lanes = Lanes(board[i].name);
-            diagonals = Diagonals(board[i].name);
-            diagscope = checkValueInArrays(id, diagonals);
-            lanescope = checkValueInArrays(id, lanes);
-            allscopes.push(diagscope);
-            allscopes.push(lanesscope)
-        } else if (board[i]['piece'].type == 'bishop' && board[i]['piece'].color == color) {
-            diagonals = Diagonals(board[i].name);
-            allscopes.push(diagonals);
-        } else if (board[i]['piece'].type == 'rook' && board[i]['piece'].color == color) {
-            lanes = Lanes(board[i].name);
-            allscopes.push(lanes);
-        } else if (board[i]['piece'].type == 'knight' && board[i]['piece'].color == color) {
-            lshapes = Lshapes(board[i].name);
-            allscopes.push(lshapes);
-        } else if (board[i]['piece'].type == 'king' && board[i]['piece'].color == color) {
-            surroundings = Surroundings(board[i].name);
-            allscopes.push(surroundings);
-        } else if (board[i]['piece'].type == 'pawn' && board[i]['piece'].color == color) {
-            pawnscope = PawnScope(board[i].name);
-            allscopes.push(pawnscope);
-        }
-    return allscopes;
-    }
-}
